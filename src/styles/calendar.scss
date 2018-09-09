@@ -1,0 +1,62 @@
+@mixin expiredMeeting() {
+  opacity: .5 !important;
+  // background-color: rgba(0, 120, 215, .5) !important;
+}
+
+.old-day,
+.old-day ._wx_ui,
+.old-day ._cb_G1 {
+  @include expiredMeeting();
+  opacity: .5 !important;
+  // background-color: rgba(0, 120, 215, .5) !important;
+}
+
+
+.current-date-range.today-monday .sunday {
+  @include expiredMeeting();
+}
+
+.current-date-range.today-tuesday {
+  .sunday,
+  .monday {
+    @include expiredMeeting();
+  }
+}
+
+.current-date-range.today-wednesday {
+  .sunday, 
+  .monday,
+  .tuesday {
+    @include expiredMeeting();
+  }
+}
+
+.current-date-range.today-thursday {
+  .sunday, 
+  .monday,
+  .tuesday,
+  .wednesday {
+    @include expiredMeeting();
+  }
+}
+
+.current-date-range.today-friday {
+  .sunday, 
+  .monday,
+  .tuesday,
+  .wednesday,
+  .thursday {
+    @include expiredMeeting();
+  }
+}
+
+.current-date-range.today-saturday {
+  .sunday, 
+  .monday,
+  .tuesday,
+  .wednesday,
+  .thursday
+  .friday {
+    @include expiredMeeting();
+  }
+}
