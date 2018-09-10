@@ -9,9 +9,6 @@ import {
  */
 function isToday(compareDate) {
   const now = new Date();
-  console.log('dayIndx[compareDate]: ', dayIndx[compareDate]);
-  console.log('now.getDay(: ', now.getDay());
-
   return (now.getDay() === dayIndx[compareDate]);
 }
 
@@ -31,9 +28,18 @@ function isOldAppointment($calDay, day, top) {
   if (now.getDay() === dayIndx[day]) {
     // if appointment-time is AFTER the duration (top < top + $calDay.height()) of the appointment, it's old.
     return (top <= hours24[now.getHours()].topNum && (top < top + $calDay.height()));
-    
   } else if (now.getDay() > dayIndx[day]) {
     return true;
+  }
+
+  return false;
+}
+
+function isActiveAppointment($calDay, day, top) {
+  const now = new Date();
+  if (now.getDay() === dayIndx[day]) {
+    // if appointment-time is AFTER the duration (top < top + $calDay.height()) of the appointment, it's old.
+    return (top <= hours24[now.getHours()].topNum && (top < top + $calDay.height()));
   }
 
   return false;
@@ -58,32 +64,15 @@ function isOutdated(month, day, year) {
     if (monthsIndx[month.toLowerCase()] < now.getUTCMonth()) return true;
     } else if (Number(month) && month < now.getUTCMonth()) return true;
 
-  console.log('(Number(day) < now.getDay(): ', Number(day) < now.getDay());
-  console.log('now.getDay(): ', now.getDay());
-
   if (typeof day === 'string' && day.length > 2) {
     if (dayIndx[month.toLowerCase()] < now.getUTCMonth()) return true;
   } else if (Number(day) < now.getDate()) return true;
 
   return false;
-  // if (calViewDate.getFullYear() < now.getFullYear()) return true;
-  // // console.log('calViewDate.getUTCMonth() < now.getUTCMonth(): ', calViewDate.getUTCMonth() < now.getUTCMonth());
-
-  // if (calViewDate.getUTCMonth() < now.getUTCMonth()) return true;
-  
-  // if (calViewDate.getUTCMonth() === now.getUTCMonth()) {
-  //   console.log('calViewDate: ', calViewDate);
-  //   console.log('now.getDay(): ', now.getDay());
-  //   console.log('calViewDate.getDay(): ', calViewDate.getDay());
-  //   console.log('calViewDate.getDay() < now.getDay(): ', calViewDate.getDay() < now.getDay());
-
-  //   if (calViewDate.getDay() < now.getDay()) return true;
-  // }
-
-  // return false;
 }
 
 export {
+  isActiveAppointment,
   isOutdated,
   isOldAppointment,
   isToday,

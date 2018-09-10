@@ -1,5 +1,6 @@
-$active: #0078d7;
-$canceled: #d74f00;
+$active: #DD737D;
+$default: #0078d7;
+$canceled: rgba(218, 83, 44, .5);
 $expired: #a6a6a6;
 
 @mixin displayAs($color: $expired, $opacity: .7) {
@@ -7,8 +8,8 @@ $expired: #a6a6a6;
   border: solid 1px $color;
   box-sizing: border-box;
 
-  > div > div._cb_C1 {
-    // border-color: $canceled;
+  div._cb_C1 {
+    opacity: .5;
   }
 }
 
@@ -16,16 +17,15 @@ $expired: #a6a6a6;
 .old-day ._wx_ui,
 .old-day ._cb_G1 {
   @include displayAs($expired);
-  // opacity: .5 !important;
-  // background-color: rgba(0, 120, 215, .5) !important;
 
   &.was-canceled {
-    @include displayAs($canceled, 0.5);
+    @include displayAs($canceled);
   }
-}
 
-.was-canceled {
-  @include displayAs($canceled);
+  &.active-meeting {
+    border: solid 1px $active;
+    box-sizing: border-box;
+  }
 }
 
 .current-date-range.today-monday .sunday {
@@ -75,4 +75,18 @@ $expired: #a6a6a6;
   .friday {
     @include displayAs($expired);
   }
+}
+
+.was-canceled {
+  @include displayAs($canceled);
+}
+
+.active-meeting {
+  border: solid 1px $active !important;
+  box-sizing: border-box !important;
+}
+
+.today-column {
+  border-right: solid 1px $active;
+  border-left: solid 1px $active;
 }

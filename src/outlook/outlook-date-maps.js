@@ -194,9 +194,20 @@ const hours24 = [{
   },
 ];
 
+function getCalendarView(search = window.location.search) {
+  if (search.indexOf('WorkWeek') !== -1) {
+    return workWeek;
+  } else if (search.indexOf('Week') !== -1) {
+    return week;
+  } else if (search.indexOf('Month') !== -1) {
+    return month;
+  }
+}
+
 export {
   week,
   workWeek,
   month,
   hours24,
+  getCalendarView,
 };

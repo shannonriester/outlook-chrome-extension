@@ -12,8 +12,7 @@ export default function observePageChange() {
   const target = document.querySelector('._wx_f > div:nth-child(2)');
   const config = { attributes: true };
   const observer = new MutationObserver((mutations) => {
-    console.log('mutations: ', mutations);
-
+    // console.log('mutations: ', mutations);
     if (isOfficeCalendar()) {
         observer.disconnect();
         updateCalendar();
