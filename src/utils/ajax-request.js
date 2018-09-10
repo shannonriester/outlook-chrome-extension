@@ -1,18 +1,29 @@
-export default function ajaxRequest(callback, handler = handleLoad) {
-  const send = XMLHttpRequest.prototype.send;
-  
-  XMLHttpRequest.prototype.send = function() {
-    const ajaxReq = this;
-    ajaxReq.addEventListener('load', handler);
-    send.apply(ajaxReq, arguments.bind(null, ajaxReq, callback, handler));
-  }
-}
+export default function ajaxRequest(callback) {
+  return new Promise(function(resolve, reject) {
+    const send = XMLHttpRequest.prototype.send
+    XMLHttpRequest.prototype.send = function() {
 
-function handleLoad(ajaxReq, callback, handler, evt) {
-  if (evt.target.responseText.indexOf('CalendarItem:#Exchange') !== -1) {
-    if (document.querySelectorAll('._wx_f').length && document.querySelectorAll('._wx_v').length) {
-      ajaxReq.removeEventListener('load', handler);
-      callback();
+      this.addEventListener('load', function(evt) {
+        return new Promise((resolve1, reject2) => {
+          console.log('evt: ', evt);
+          // these statements don't work well with the ASYNC problem but oh well...
+          if (this.responseText.indexOf('CalendarItem:#Exchange') !== -1) {
+            callback(this.responseText);
+            resolve(callback);
+            resolve1(this.responseText);
+          }
+        });
+      });
+
+      send.apply(this, arguments);
     }
-  }
+  }).then(function(args) {
+    console.log('args: ', args);
+    console.log('resolving!!!!');
+    callback();
+
+    console.log('SUCCESS!');
+  }).done(function() {
+
+  });
 }

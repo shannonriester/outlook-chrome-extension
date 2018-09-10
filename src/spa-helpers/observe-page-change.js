@@ -1,5 +1,4 @@
-import { updateCalendar } from '../outlook/render-calendar';
-
+import updateCalendar from '../outlook/render-calendar';
 
 /**
  * observeCalendarViewChange - Listens for when user changes cal-view from any
@@ -19,7 +18,7 @@ export default function observePageChange() {
         observer.observe(target, config);
       }
   });
-
+  
   if (document.readyState === 'complete' && isOfficeCalendar()) updateCalendar();
   observer.observe(target, config);
 }

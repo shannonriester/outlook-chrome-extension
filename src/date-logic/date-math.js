@@ -4,8 +4,13 @@ import {
   dayNumMap,
   monthsIndx,
 } from './date-maps.js';
+
 /**
+ * isToday - Determines if @compareDate is today.
+ * 
  * @param  {Number} compareDate
+ * 
+ * @return {Boolean}
  */
 function isToday(compareDate) {
   const now = new Date();
@@ -17,6 +22,7 @@ function isToday(compareDate) {
  * @param  {Object.<jQuery node>} $calDay - The appointment-node being evaluated.
  * @param  {String} day - Today's day (i.e: monday, tuesday, thursday, wednesday).
  * @param  {Number} top - $calDay's top-position.
+ * @return {Boolean}
  *
  * @example - if it's 1:34pm and $calDay is from 1pm to 1:30pm, then return true; if $calDay
  * is from 1pm to 2pm, return false. Outlook calendar appointments/meetings are evaluated based off of their
@@ -53,13 +59,14 @@ function isActiveAppointment($calDay, day, top) {
  * @param  {String} year - ex: "2018".
  * @param  {String} month - The month's name, not its index of the year.
  * @param  {String} day - The day's name, not its index of the week.
+ * 
+ * @return {Boolean}
  */
 function isOutdated(month, day, year) {
   const now = new Date();
-  // const calViewDate = new Date(`${month} ${day}, ${year}`);
-
-  if (Number(year) < now.getFullYear()) return true;
   
+  if (Number(year) < now.getFullYear()) return true;
+
   if (typeof month === 'string' && month.length > 2) {
     if (monthsIndx[month.toLowerCase()] < now.getUTCMonth()) return true;
     } else if (Number(month) && month < now.getUTCMonth()) return true;
