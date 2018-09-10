@@ -2,29 +2,67 @@ import {
   workWeek,
   week,
   month,
-} from './date-maps';
+} from './outlook-date-maps';
 import {
   isOldAppointment,
   isOutdated,
-  dayNumMap,
+  isToday,
 } from '../date-logic/date-math';
-
+import { dayNumMap } from '../date-logic/date-maps';
 const dayClass = '_wx_m1';
+const dayColClass = '_wx_u1';
 
-function updateCalendar() {
-  const { year, month, endDay } = getOutlookDateRange();
-  if (!isOutdated(year, month, endDay)) {
-    $('body').addClass(`current-date-range ${dayNumMap[new Date().getDay()]}`);
-    const calView = getCalendarView();
-    markDays(calView);
+/**
+ * updateCalendar - Determine if/how to render each of the current calendar-view's
+ * appointments (expired or not-expired).
+ */
+export default function updateCalendar() {
+  const $body = $('body');
+  const { year, month, endDay, startDay } = getOutlookDateRange();
+  // console.log('year: ', year);
+  // console.log('month: ', month);
+  console.log('endDay: ', endDay);
+  console.log('!isOutdated(month, startDay, year): ', !isOutdated(month, endDay, year));
+  // console.log('!isOutdated(month, startDay, year): ', !isOutdated(month, endDay, year));
+  // if it's between the start and end of the current week...
+  if (!isOutdated(month, endDay, year)) {
+    $body.addClass(`current-date-range ${dayNumMap[new Date().getDay()]}`);
+    getCalendarView().map(markDays);
   } else {
+    console.log('REMOVING CURRENT DATE RANGE!!!', $(`.${dayClass}`));
     $(`.${dayClass}`).addClass('old-day');
-    $('body').removeClass('current-date-range');
+    $body.removeClass('current-date-range');
   }
 }
 
-function wasCanceled(meeting) {
-  return meeting.indexOf('Cancel') !== -1;
+function markDays(day) {
+  const left = getPositionPx($(day.target));
+  const $meeting = $(`.${dayClass}[style*="left: ${left}px"]`);
+
+  if ($meeting.length) {
+    $meeting.addClass(`${day.day} updated-day`);
+    markConcurrentApts($meeting, day.day);
+    
+    if ($('body').hasClass('current-date-range') && isOldAppointment($meeting, day.day, getPositionPx($meeting, 'top'))) {
+      $meeting.addClass('old-day');
+      // MUST evaluate if in current week-view before evaluating if $meeting is today...
+      if (new Date(day.day)) {
+        $(`.${dayColClass}[style*="left: ${left}px"]`).addClass('today-column');
+      } else {
+        $('.today-column').removeClass('today-column');
+      }
+    }
+
+    if (wasCanceled($meeting)) {
+      $meeting.addClass('was-canceled');
+    } else if ($meeting.hasClass('was-canceled')) {
+      $meeting.removeClass('was-canceled');
+    }
+  }
+}
+
+function wasCanceled($meeting) {
+  return $meeting.text().indexOf('Cancel') !== -1;
 }
 
 function getPositionPx($elm, position = 'left') {
@@ -39,22 +77,6 @@ function markConcurrentApts($meeting, day) {
   }
 }
 
-function markDays(calView) {
-  return calView.map((day) => {
-    const left = getPositionPx($(day.target));
-    day.left = left;
-    const $calDay = $(`._wx_m1[style*="left: ${left}px"]`);
-    if ($calDay.length) {
-      $calDay.addClass(`${day.day} updated-day`);
-      markConcurrentApts($calDay, day.day);
-      
-      if (isOldAppointment($calDay, day.day, getPositionPx($calDay, 'top'))) {
-        $calDay.addClass('old-day');
-      }
-    }
-  });
-}
-
 function getCalendarView(search = window.location.search) {
   if (search.indexOf('WorkWeek') !== -1) {
     return workWeek;
@@ -66,31 +88,25 @@ function getCalendarView(search = window.location.search) {
 }
 
 function getOutlookDateRange() {
-  const fullDate = $('._wx_v').text().split(',');
-  const year = fullDate[1];
-  const month = fullDate[0].split(' ')[0];
+  const $dateRante = $('._wx_v');
+  if ($dateRante.length && $dateRante.text() && $dateRante.text().length) {
+    const fullDate = $dateRante.text().split(',');
+    const year = fullDate[1];
+    const month = fullDate[0].split(' ')[0];
+    
+    const days = fullDate[0].split(' ')[1].split('–');
+    const startDay = days[0];
+    const endDay = days[1];
   
-  const days = fullDate[0].split(' ')[1].split('–');
-  const startDay = days[0];
-  const endDay = days[1];
-
-  return {
-    year,
-    month,
-    startDay,
-    endDay,
-  };
-}
-
-function isOfficeCalendar(location = window.location) {
-  return location.search.indexOf('path=/calendar') !== -1
+    return {
+      year,
+      month,
+      startDay,
+      endDay,
+    };
+  }
 }
 
 export {
-  isOfficeCalendar,
   updateCalendar,
 };
-
-// render cal view
-// generate cal view
-// determine

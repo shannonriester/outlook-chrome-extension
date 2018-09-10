@@ -1,0 +1,55 @@
+// {
+//   "name": "austin-tiy-build-tool",
+//   "version": "1.0.0",
+//   "description": "A basic build tool for compiling javascripts using SCSS, ES6/7/JSX",
+//   "main": "index.js",
+//   "scripts": {
+//     "clean-html": "if [ -f 'dist/index.html' ]; then rm dist/index.html; fi",
+//     "clean-assets": "if [ -d 'dist/assets' ]; then rm -r dist/assets; fi",
+//     "clean-css": "if [ -f 'dist/main.css' ]; then rm dist/main.css; fi && if [ -f 'dist/main.css.map' ]; then rm dist/main.css.map; fi",
+//     "clean-scripts": "if [ -f 'dist/main.js' ]; then rm dist/main.js; fi",
+//     "build-dist": "if [ ! -d dist ]; then mkdir dist; fi",
+//     "build-html": "npm run build-dist && npm run clean-html && if [ -f 'src/index.js' ]; then cp src/index.js dist/index.js; else echo you must have an index.js file; fi",
+//     "build-assets": "npm run build-dist && npm run clean-assets && if [ -d 'src/assets' ]; then cp -r src/assets dist; fi",
+//     "build-css": "npm run build-dist && npm run clean-css && if [ -f 'src/scss/main.scss' ]; then sass src/scss/main.scss:dist/main.css; else echo you must have a scss directory with a main.scss in your app to compile css; fi",
+//     "build-scripts": "npm run build-dist && npm run clean-scripts && if [ -f 'src/scripts/entry.js' ]; then browserify src/scripts/entry.js -d -v --outfile dist/main.js; else echo you must have a scripts directory with an entry.js in your app to compile js; fi",
+//     "build": "npm run build-scripts && npm run build-css && npm run build-html && npm run build-assets",
+//     "watch-html": "onchange 'src/index.html' -- npm run build-html",
+//     "watch-sass": "onchange 'src/scss/**/*.scss' -- npm run build-css",
+//     "watch-scripts": "watchify src/scripts/entry.js -d -v --outfile dist/main.js",
+//     "watch-assets": "onchange 'src/assets/**/*.*' -- npm run build-assets",
+//     "watch": "parallelshell 'npm run watch-sass' 'npm run watch-scripts'",
+//     "dev-server-start": "http-server ./dist",
+//     "dev-server-watch": "npm run dev-server-start && onchange 'dist/**/*.*' -- npm run dev-server-start",
+//     "compile": "npm run build && parallelshell 'npm run watch'",
+//     "postinstall": "echo '.sass-cache' >> .gitignore && echo 'dist/main.css.map' >> .gitignore && echo 'node_modules' >> .gitignore && npm start"
+//   },
+//   "browserify": {
+//     "transform": [
+//       "babelify"
+//     ]
+//   },
+//   "babel": {
+//     "sourceType": "module",
+//     "presets": [
+//       "es2015"
+//     ]
+//   },
+//   "author": "shanwow",
+//   "license": "MIT",
+//   "devDependencies": {
+//     "babel-preset-es2015": "^6.9.0",
+//     "babel-register": "^6.11.5",
+//     "babelify": "^7.3.0",
+//     "browserify": "^13.0.1",
+//     "jsdom": "^9.4.1",
+//     "onchange": "^2.5.0",
+//     "parallelshell": "^2.0.0",
+//     "react-addons-test-utils": "^15.3.0",
+//     "watchify": "^3.7.0"
+//   },
+//   "dependencies": {
+//     "nonce": "^1.0.4",
+//     "normalize-scss": "^5.0.3",
+//   }
+// }

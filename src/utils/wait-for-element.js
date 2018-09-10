@@ -19,16 +19,20 @@
  *      // Do something with targetElement
  *    });
  */
-export default function when(selector, callback, interval = 50) {
+export default function waitForElement(selector, callback, interval = 50, counter = 0) {
   const elements = document.querySelectorAll(selector);
 
-  // If element found, call callback
+  // If element found, call callback.
   if (elements.length) return callback(elements);
 
-  // If element not found by dom ready, exit
-  if (document.readyState === 'complete') return;
+  // If element not found by 2s after dom ready, exit.
+  if (document.readyState === 'complete' && counter < 5000) {
+    counter = counter + interval;
+  } else {
+    return;
+  }
 
   // Else, try again
-  const next = when.bind(null, selector, callback, interval);
+  const next = waitForElement.bind(null, selector, callback, interval);
   return setTimeout(next, interval);
 }

@@ -1,7 +1,4 @@
-import {
-  isOfficeCalendar,
-  updateCalendar,
-} from '../outlook/render-calendar';
+import { updateCalendar } from '../outlook/render-calendar';
 
 
 /**
@@ -11,7 +8,7 @@ import {
  *
  * @return {undefined}
  */
-export default function observePageChange(today) {
+export default function observePageChange() {
   const target = document.querySelector('._wx_f > div:nth-child(2)');
   const config = { attributes: true };
   const observer = new MutationObserver((mutations) => {
@@ -26,4 +23,8 @@ export default function observePageChange(today) {
 
   if (document.readyState === 'complete' && isOfficeCalendar()) updateCalendar();
   observer.observe(target, config);
+}
+
+function isOfficeCalendar(location = window.location) {
+  return location.search.indexOf('path=/calendar') !== -1
 }

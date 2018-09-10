@@ -50,7 +50,7 @@ gulp.task('build:clean', (cb) => {
   return del(paths.dest, cb);
 });
 
-function buildOut(done, prependee, appendee, extname) {
+function buildOut(done) {
   glob(paths.scripts, (err, files) => {
     if (err) done(err);
 
@@ -59,12 +59,7 @@ function buildOut(done, prependee, appendee, extname) {
           entries: [entry],
         })
         .transform('babelify', {
-          presets: ['es2015', 'es2016', 'es2017', 'react'],
-          plugins: [
-            ['transform-react-jsx', {
-              'pragma': 'jsxr',
-            }],
-          ],
+          presets: ['es2015', 'es2016', 'es2017'],
         })
         .transform(sassify, {
           sourceMap: false,
@@ -78,12 +73,10 @@ function buildOut(done, prependee, appendee, extname) {
         .bundle()
         .pipe(source(entry.replace('./src/', '')))
         .pipe(rename({
-          extname,
+          extname: '.bundle.js',
         }))
         .pipe(buffer())
         .pipe(uglify())
-        .pipe(insert.prepend(prependee))
-        .pipe(insert.append(appendee))
         .pipe(gulp.dest(paths.dest));
     });
 
@@ -92,16 +85,7 @@ function buildOut(done, prependee, appendee, extname) {
 }
 
 // Default minified code.
-const scriptsPrepend = '/* jshint ignore:start */\n';
-const scriptsAppend = '\n/* jshint ignore:end */';
-const extjs = '.bundle.js';
-gulp.task('build:scripts', (done) => buildOut(done, scriptsPrepend, scriptsAppend, extjs));
-
-// Build target-friendly code
-const targetPrepend = '<script type="text/javascript">\ntry {\n/* jshint ignore:start */\n\t\t';
-const targetAppend = '\n/* jshint ignore:end */\n} catch(e) {\n\tconsole.error("CH Error: ", e);\n}\n<\/script>';
-const exthtml = '.bundle.html';
-gulp.task('build:target', (done) => buildOut(done, targetPrepend, targetAppend, exthtml));
+gulp.task('build:scripts', buildOut);
 
 // Build experiment
 gulp.task('build', () => {
@@ -117,6 +101,3 @@ gulp.task('watch', () => {
 
 // Default task
 gulp.task('default', ['build', 'watch']);
-
-// Build target-html
-gulp.task('target', ['build', 'build:target']);

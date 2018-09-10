@@ -1,25 +1,24 @@
-Author: Shannon Riester
+<!-- Author: Shannon Riester -->
+# Naturalize Outlook Calendar (NOC)
+A [Chrome extension]() that displays outdated appointments in a more intuitive way: expired meetings look "expired."
 
-Notes: do
+### Author
+Shannon (_ShanWow_) Riester.  
 
-```js
-// will need to be parsed to get the current date...
-const currentDate = document.querySelector('#_ariaId_27');
+## About NOC (version 0.0.0)
+**About:**
+NOC calculates and overrides your Outlook's default browser-styles so that your calendar appointments have a more _intuitive_ look. You still have 100% full access to opening & editing all of your old/canceled calendar meetings, they'll just look slightly more opaque.  
 
-// the left positioning for each child, '._cb_l2', indicates what the other days are...
-const weekDaysContainer = document.querySelector('._cb_k2');
+**What to do:**  
+  Simply download this [extenstion]() and enjoy!  
 
-const monday = $(weekDaysContainer).find('> div:nth-child(1)');
-const tuesday = $(weekDaysContainer).find('> div:nth-child(2)');
-const wednesday = $(weekDaysContainer).find('> div:nth-child(3)');
-const thursday = $(weekDaysContainer).find('> div:nth-child(4)');
-const friday = $(weekDaysContainer).find('> div:nth-child(4)');
+**Features:**
+ - _Expired meetings_ appear opaque.
+ - _Canceled appointments_ have a new color, opaque-grey.
+ - The current day of th week (in _WorkWeek_, _Week_ and _Month_ views) is more apparent (the day is encased in an Outlook-red border).
 
-const tuesdayLeft = $(weekDaysContainer).find('> div:nth-child(2)').css('left');
-// const mondayLeft =
-// const $tuesdays =
+**How:**
 
-const weekdayAppts = document.querySelector('._wx_m1');
 
-$('._cb_2')
-```
+## Credits
+- Gulp file
