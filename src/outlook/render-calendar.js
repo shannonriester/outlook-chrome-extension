@@ -19,15 +19,18 @@ const dayClass = '_wx_m1';
 export default function updateCalendar() {
   const $body = $('body');
   const { year, month, endDay } = getOutlookDateRange();
-  // if it's between the start and end of the current week...
+  const today = dayNumMap[new Date().getDay()];
+  console.log('today: ', today);
+
   if (!isOutdated(month, endDay, year)) {
-    $body.addClass(`current-date-range ${dayNumMap[new Date().getDay()]}`);
+    $body.addClass(`current-date-range ${today}`);
     getCalendarView().targetList.map(markDays);
   } else {
     $(`.${dayClass}`).addClass('old-day');
     $body.removeClass('current-date-range');
   }
 }
+
 /**
  * markDays - Iterates over the calendar-map (used to identify
  * to identify how to target the view 's elements in the DOM) in order to mark
@@ -43,19 +46,13 @@ function markDays(dateView) {
   if ($meeting.length) {
     if ($('body').hasClass('current-date-range')) {
       // OLD/ACTIVE/FUTURE MEETINGS (must iterate to get each meetings' time).
-      $meeting.each((i, meeting) => handleTodaysApts($(meeting), dateView));
+      $meeting.each((i, meeting) => labelAppointments($(meeting), dateView));
       
       // MARK TODAY'S COLUMN.
       if (isToday(dateView.day)) {
-        // console.log('dayIndx[dateView.day]: ', dayIndx[dateView.day]);
-        console.log('getCalendarView().column[dateView.day]: ', getCalendarView().column[dateView.day]);
-        $(getCalendarView().column[dateView.day]).addClass('active-meeting');
-        // markTodaysColumn(dateView);
+        $(getCalendarView().column[dateView.day]).addClass('today-column');
       }
     }
-
-    // CONCURRENT MEETINGS
-    // markConcurrentApts($meeting, dateView.day);
 
     // CANCELED MEETINGS
     handleCanceled($meeting);
@@ -98,54 +95,45 @@ function getOutlookDateRange() {
 }
 
 /**
- * handleTodaysApts - Determines if meeting should be marked as old or active
+ * labelAppointments - Determines if meeting should be marked as old or active
  * depending on the current time and the meeting's time.
  * 
  * @param  {Object} $meeting - The calendar meeting.
  * @param  {Number} day - The weekday's index number.
  */
-function handleTodaysApts($meeting, dateView) {
+function labelAppointments($meeting, dateView) {
   const day = dateView.day;
   const top = getCssPx($meeting, 'top');
   $meeting.addClass(`${day} updated-day`);
 
   if (isOldAppointment($meeting, day, top)) {
     $meeting.addClass('old-day');
+    // CONCURRENT OLD MEETINGS
     markConcurrentApts($meeting, dateView, 'old-day');
 
     // TODO: finish out this logic and make more efficient...
   } else if (isActiveAppointment($meeting, day, top)) {
     $meeting.addClass('active-meeting');
-    // markConcurrentApts($meeting, dateView, 'active-meeting');
+    // CONCURRENT ACTIVE MEETINGS
+    markConcurrentApts($meeting, dateView, 'active-meeting');
   }
-}
-
-function markTodaysColumn(dateView) {
-  // console.log('dateView.day: ', dateView.day);
-  // console.log('markTodaysColumn dateView-----: ', dateView);
-  // const colLeft = getCssPx($(dateView.target), 'left');
-  // console.log('colLeft: ', colLeft);
-  // if (typeof colLeft === 'number') {
-  //   const weekAdjustment = $('._cb_l2').is(':visible') ? 58 : 0;
-  //   console.log('weekAdjustment: ', weekAdjustment);
-  
-  //   $(`.${dayColClass}[style*="left: ${colLeft + weekAdjustment}px"]`).addClass('today-column');
-  //   // $(`.${dayColClass}[style*="left: ${colLeft + weekAdjustment}px"]`).addClass('today-column');
-  // }
 }
 
 function markConcurrentApts($meeting, dateView, classMarker) {
   if ($meeting.width() < $(dateView.target).width()) {
-    const meetingTabIndx = $meeting.attr('tabindex');
-    if (meetingTabIndx && Number(meetingTabIndx)) {
-      const $next = $(`.${dayClass}[tabindex${meetingTabIndx + 1}]`);
-      const $prev = $(`.${dayClass}[tabindex${meetingTabIndx + 1}]`);
-      if ($next.length) {
-        $next.addClass(`${classMarker} ${dateView.day}`);
-      } 
-  
-      if ($prev.length) {
-        $prev.addClass(`${classMarker} ${dateView.day}`);
+    const meetingTabIndx = Number($meeting.attr('tabindex'));
+    
+    if ($meeting.prev('._wx_m1').length && !$meeting.prev('._wx_m1').hasClass('updated-day')) {
+      const prevTabIndx = Number($meeting.prev('._wx_m1').attr('tabindex'));
+      if (prevTabIndx + 1 === meetingTabIndx || prevTabIndx - 1 === meetingTabIndx) {
+        $meeting.prev('._wx_m1').addClass(classMarker);
+      }
+    }
+
+    if ($meeting.next('._wx_m1').length && !$meeting.next('._wx_m1').hasClass('updated-day')) {
+      const prevTabIndx = Number($meeting.next('._wx_m1').attr('tabindex'));
+      if (prevTabIndx + 1 === meetingTabIndx || prevTabIndx - 1 === meetingTabIndx) {
+        $meeting.next('._wx_m1').addClass(classMarker);
       }
     }
   }
