@@ -5,9 +5,12 @@ import {
   isOutdated,
   isToday,
 } from '../date-logic/date-math';
-import { dayNumMap } from '../date-logic/date-maps';
+import {
+  dayNumMap,
+  dayIndx,
+} from '../date-logic/date-maps';
 const dayClass = '_wx_m1';
-const dayColClass = '_wx_u1';
+// const dayColClass = '_wx_u1';
 
 /**
  * updateCalendar - Determine if/how to render each of the current calendar-view's
@@ -19,7 +22,7 @@ export default function updateCalendar() {
   // if it's between the start and end of the current week...
   if (!isOutdated(month, endDay, year)) {
     $body.addClass(`current-date-range ${dayNumMap[new Date().getDay()]}`);
-    getCalendarView().map(markDays);
+    getCalendarView().targetList.map(markDays);
   } else {
     $(`.${dayClass}`).addClass('old-day');
     $body.removeClass('current-date-range');
@@ -33,33 +36,29 @@ export default function updateCalendar() {
  * @param  {Object} dateView - The map of the current calendar's view 
  */
 function markDays(dateView) {
-  const left = getCssPx($(dateView.target));
+  const left = getCssPx($(dateView.target), 'left');
   const $meeting = $(`.${dayClass}[style*="left: ${left}px"]`);
   
   // ALL CALENDAR MEETINGS
   if ($meeting.length) {
-    if ($('body').hasClass('current-date-range') && $meeting.length) {
-      
-      // OLD/ACTIVE MEETINGS (must iterate to get each meetings' time).
-      $meeting.each((i, meeting) => handleTodaysApts($(meeting), dateView.day));
+    if ($('body').hasClass('current-date-range')) {
+      // OLD/ACTIVE/FUTURE MEETINGS (must iterate to get each meetings' time).
+      $meeting.each((i, meeting) => handleTodaysApts($(meeting), dateView));
       
       // MARK TODAY'S COLUMN.
-      if (isToday(dateView.day) && !$('.today-column').length) {
-        const colLeft = getCssPx($(dateView.target).parent(), 'margin-left');
-        $(`.${dayColClass}[style*="left: ${colLeft}px"]`).addClass('today-column');
+      if (isToday(dateView.day)) {
+        // console.log('dayIndx[dateView.day]: ', dayIndx[dateView.day]);
+        console.log('getCalendarView().column[dateView.day]: ', getCalendarView().column[dateView.day]);
+        $(getCalendarView().column[dateView.day]).addClass('active-meeting');
+        // markTodaysColumn(dateView);
       }
     }
 
     // CONCURRENT MEETINGS
-    $meeting.addClass(`${dateView.day} updated-day`);
-    markConcurrentApts($meeting, dateView.day);
+    // markConcurrentApts($meeting, dateView.day);
 
     // CANCELED MEETINGS
-    if (wasCanceled($meeting)) {
-      $meeting.addClass('was-canceled');
-    } else if ($meeting.hasClass('was-canceled') && !wasCanceled($meeting)) {
-      $meeting.removeClass('was-canceled');
-    }
+    handleCanceled($meeting);
   }
 }
 /**
@@ -105,21 +104,50 @@ function getOutlookDateRange() {
  * @param  {Object} $meeting - The calendar meeting.
  * @param  {Number} day - The weekday's index number.
  */
-function handleTodaysApts($meeting, day) {
+function handleTodaysApts($meeting, dateView) {
+  const day = dateView.day;
   const top = getCssPx($meeting, 'top');
+  $meeting.addClass(`${day} updated-day`);
+
   if (isOldAppointment($meeting, day, top)) {
     $meeting.addClass('old-day');
+    markConcurrentApts($meeting, dateView, 'old-day');
 
     // TODO: finish out this logic and make more efficient...
   } else if (isActiveAppointment($meeting, day, top)) {
     $meeting.addClass('active-meeting');
+    // markConcurrentApts($meeting, dateView, 'active-meeting');
   }
 }
 
-function markConcurrentApts($meeting, day) {
-  if ($meeting.next('.wx-m1:not(.updated-day)').length) {
-    $meeting.addClass(`${day} updated-day`);
-    markConcurrentApts($meeting, day);
+function markTodaysColumn(dateView) {
+  // console.log('dateView.day: ', dateView.day);
+  // console.log('markTodaysColumn dateView-----: ', dateView);
+  // const colLeft = getCssPx($(dateView.target), 'left');
+  // console.log('colLeft: ', colLeft);
+  // if (typeof colLeft === 'number') {
+  //   const weekAdjustment = $('._cb_l2').is(':visible') ? 58 : 0;
+  //   console.log('weekAdjustment: ', weekAdjustment);
+  
+  //   $(`.${dayColClass}[style*="left: ${colLeft + weekAdjustment}px"]`).addClass('today-column');
+  //   // $(`.${dayColClass}[style*="left: ${colLeft + weekAdjustment}px"]`).addClass('today-column');
+  // }
+}
+
+function markConcurrentApts($meeting, dateView, classMarker) {
+  if ($meeting.width() < $(dateView.target).width()) {
+    const meetingTabIndx = $meeting.attr('tabindex');
+    if (meetingTabIndx && Number(meetingTabIndx)) {
+      const $next = $(`.${dayClass}[tabindex${meetingTabIndx + 1}]`);
+      const $prev = $(`.${dayClass}[tabindex${meetingTabIndx + 1}]`);
+      if ($next.length) {
+        $next.addClass(`${classMarker} ${dateView.day}`);
+      } 
+  
+      if ($prev.length) {
+        $prev.addClass(`${classMarker} ${dateView.day}`);
+      }
+    }
   }
 }
 
@@ -127,7 +155,18 @@ function wasCanceled($meeting) {
   return $meeting.text().indexOf('Cancel') !== -1;
 }
 
+function handleCanceled($meeting) {
+  if (wasCanceled($meeting)) {
+    $meeting.addClass('was-canceled');
+  } else if ($meeting.hasClass('was-canceled') && !wasCanceled($meeting)) {
+    $meeting.removeClass('was-canceled');
+  }
+}
+
 function getCssPx($elm, position = 'left') {
-  const pxVal = $elm.css(position).replace('px', '');
-  if (pxVal) return Number(pxVal);
+  const pxVal = $elm.css(position);
+
+  if (pxVal && pxVal.indexOf('px') !== -1) {
+    return Number(pxVal.replace('px', ''));
+  }
 }

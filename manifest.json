@@ -1,0 +1,19 @@
+{
+  "name": "NOC - Naturalize Outlook Calendar",
+  "version": "0.0.1",
+  "description": "Display Outlook's calendar in a more intuitive way!",
+  "incognito": "split",
+  "browser_action": {
+    "default_icon": "calendar-outline-filled.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "page": "background.html"
+  },
+  "manifest_version": 2
+}

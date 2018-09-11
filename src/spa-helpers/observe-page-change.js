@@ -1,4 +1,5 @@
 import updateCalendar from '../outlook/render-calendar';
+// import { getCalendarView } from '../'
 
 /**
  * observeCalendarViewChange - Listens for when user changes cal-view from any

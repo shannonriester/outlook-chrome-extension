@@ -72,7 +72,9 @@ function isOutdated(month, day, year) {
     } else if (Number(month) && month < now.getUTCMonth()) return true;
 
   if (typeof day === 'string' && day.length > 2) {
-    if (dayIndx[month.toLowerCase()] < now.getUTCMonth()) return true;
+    console.log('dayIndx[month.toLowerCase()] < now.getDate(); ', dayIndx[month.toLowerCase()] < now.getDate());
+    console.log('Number(day) < now.getDate(): ', Number(day) < now.getDate());
+    if (dayIndx[month.toLowerCase()] < now.getDate()) return true;
   } else if (Number(day) < now.getDate()) return true;
 
   return false;

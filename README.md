@@ -1,6 +1,6 @@
 <!-- Author: Shannon Riester -->
 # Naturalize Outlook Calendar (NOC)
-A [Chrome extension]() that displays outdated appointments in a more intuitive way: expired meetings look "expired."
+A [Chrome extension]() that displays outdated appointments in a more intuitive way!
 
 ### Author
 Shannon (_ShanWow_) Riester.  
@@ -22,3 +22,14 @@ NOC calculates and overrides your Outlook's default browser-styles so that your 
 
 ## Credits
 - Gulp file
+
+
+## BUGSS
+1. current day-column bug
+2. concurrent meetings bug
+3. future meetings bug
+
+// BACKLOG
+1. Handling "Today" view.
+2. Handling "Month" view.
+3. Resize event

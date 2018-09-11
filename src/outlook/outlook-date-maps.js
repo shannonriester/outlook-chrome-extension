@@ -1,54 +1,86 @@
-const week = [{
-    day: 'sunday',
-    target: '._cb_g2 > ._cb_h2:nth-child(1)',
+const week = {
+  targetList: [{
+      day: 'sunday',
+      target: '._cb_g2 > ._cb_h2:nth-child(1)',
+      colTarget: '._wx_u1',
+    },
+    {
+      day: 'monday',
+      target: '._cb_g2 > ._cb_h2:nth-child(2)',
+      colTarget: '._wx_u1',
+    },
+    {
+      day: 'tuesday',
+      target: '._cb_g2 > ._cb_h2:nth-child(3)',
+      colTarget: '._wx_u1',
+    },
+    {
+      day: 'wednesday',
+      target: '._cb_g2 > ._cb_h2:nth-child(4)',
+      colTarget: '._wx_u1',
+    },
+    {
+      day: 'thursday',
+      target: '._cb_g2 > ._cb_h2:nth-child(5)',
+      colTarget: '._wx_u1',
+    },
+    {
+      day: 'friday',
+      target: '._cb_g2 > ._cb_h2:nth-child(6)',
+      colTarget: '._wx_u1',
+    },
+    {
+      day: 'saturday',
+      target: '._cb_g2 > ._cb_h2:nth-child(7)',
+      colTarget: '._wx_u1',
+    },
+  ],
+  column: {
+    sunday: '._wx_u1:eq(0)',
+    monday: '._wx_u1:eq(1)',
+    tuesday: '._wx_u1:eq(2)',
+    wednesday: '._wx_u1:eq(3)',
+    thursday: '._wx_u1:eq(4)',
+    friday: '._wx_u1:eq(5)',
+    saturday: '._wx_u1:eq(6)',
   },
-  {
-    day: 'monday',
-    target: '._cb_g2 > ._cb_h2:nth-child(2)',
-  },
-  {
-    day: 'tuesday',
-    target: '._cb_g2 > ._cb_h2:nth-child(3)',
-  },
-  {
-    day: 'wednesday',
-    target: '._cb_g2 > ._cb_h2:nth-child(4)',
-  },
-  {
-    day: 'thursday',
-    target: '._cb_g2 > ._cb_h2:nth-child(5)',
-  },
-  {
-    day: 'friday',
-    target: '._cb_g2 > ._cb_h2:nth-child(6)',
-  },
-  {
-    day: 'saturday',
-    target: '._cb_g2 > ._cb_h2:nth-child(7)',
-  },
-];
+}
 
-const workWeek = [{
-    day: 'monday',
-    target: '._cb_k2 > :nth-child(1)',
+const workWeek = {
+  targetList: [{
+      day: 'monday',
+      target: '._cb_k2 > :nth-child(1)',
+      colTarget: '._cb_l2',
+    },
+    {
+      day: 'tuesday',
+      target: '._cb_k2 > :nth-child(2)',
+      colTarget: '._cb_l2',
+    },
+    {
+      day: 'wednesday',
+      target: '._cb_k2 > :nth-child(3)',
+      colTarget: '._cb_l2',
+    },
+    {
+      day: 'thursday',
+      target: '._cb_k2 > :nth-child(4)',
+      colTarget: '._cb_l2',
+    },
+    {
+      day: 'friday',
+      target: '._cb_k2 > :nth-child(5)',
+      colTarget: '._cb_l2',
+    },
+  ],
+  column: {
+    monday: '._wx_u1:eq(7)',
+    tuesday: '._wx_u1:eq(8)',
+    wednesday: '._wx_u1:eq(9)',
+    thursday: '._wx_u1:eq(10)',
+    friday: '._wx_u1:eq(11)',
   },
-  {
-    day: 'tuesday',
-    target: '._cb_k2 > :nth-child(2)',
-  },
-  {
-    day: 'wednesday',
-    target: '._cb_k2 > :nth-child(3)',
-  },
-  {
-    day: 'thursday',
-    target: '._cb_k2 > :nth-child(4)',
-  },
-  {
-    day: 'friday',
-    target: '._cb_k2 > :nth-child(5)',
-  },
-];
+}
 
 // parent with full date: ._wx_z1
 const month = [{
