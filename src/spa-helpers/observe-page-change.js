@@ -1,5 +1,4 @@
 import updateCalendar from '../outlook/render-calendar';
-// import { getCalendarView } from '../'
 
 /**
  * observeCalendarViewChange - Listens for when user changes cal-view from any
@@ -9,10 +8,11 @@ import updateCalendar from '../outlook/render-calendar';
  * @return {undefined}
  */
 export default function observePageChange() {
+  console.log('OBSERVER STARTED!!!');
   const target = document.querySelector('._wx_f > div:nth-child(2)');
   const config = { attributes: true };
   const observer = new MutationObserver((mutations) => {
-    // console.log('mutations: ', mutations);
+    console.log('mutations: ', mutations);
     if (isOfficeCalendar()) {
         observer.disconnect();
         updateCalendar();
@@ -20,8 +20,10 @@ export default function observePageChange() {
       }
   });
   
-  if (document.readyState === 'complete' && isOfficeCalendar()) updateCalendar();
-  observer.observe(target, config);
+  if (!window.noc_observe_page_change) {
+    window.noc_observe_page_change = true;
+    observer.observe(target, config);
+  }
 }
 
 function isOfficeCalendar(location = window.location) {

@@ -19,14 +19,14 @@
  *      // Do something with targetElement
  *    });
  */
-export default function waitForElement(selector, callback, interval = 50, counter = 0) {
-  const elements = document.querySelectorAll(selector);
-
+export default function waitForJqueryElement(selector, callback, interval = 50, counter = 0) {
+  const $elements = $(selector);
+  console.log('$elements: ', $elements);
   // If element found, call callback.
-  if (elements.length) return callback(elements);
+  if ($elements.length) return callback($elements);
 
   // If element not found by 2s after dom ready, exit.
-  if (document.readyState === 'complete' && counter < 9000) {
+  if (document.readyState === 'complete' && counter < 15000) {
     counter = counter + interval;
   } else {
     return;

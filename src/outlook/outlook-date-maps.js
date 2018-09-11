@@ -36,13 +36,13 @@ const week = {
     },
   ],
   column: {
-    sunday: '._wx_u1:eq(0)',
-    monday: '._wx_u1:eq(1)',
-    tuesday: '._wx_u1:eq(2)',
-    wednesday: '._wx_u1:eq(3)',
-    thursday: '._wx_u1:eq(4)',
-    friday: '._wx_u1:eq(5)',
-    saturday: '._wx_u1:eq(6)',
+    sunday: 0,
+    monday: 1,
+    tuesday: 2,
+    wednesday: 3,
+    thursday: 4,
+    friday: 5,
+    saturday: 6,
   },
 }
 
@@ -74,11 +74,11 @@ const workWeek = {
     },
   ],
   column: {
-    monday: '._wx_u1:eq(7)',
-    tuesday: '._wx_u1:eq(8)',
-    wednesday: '._wx_u1:eq(9)',
-    thursday: '._wx_u1:eq(10)',
-    friday: '._wx_u1:eq(11)',
+    monday: 0,
+    tuesday: 1,
+    wednesday: 2,
+    thursday: 3,
+    friday: 4,
   },
 }
 

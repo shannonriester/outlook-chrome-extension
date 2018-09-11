@@ -14,6 +14,9 @@ import {
  */
 function isToday(compareDate) {
   const now = new Date();
+  // console.log('isToday now.getDay(): ', now.getDay());
+  // console.log('isToday dayIndx[compareDate]: ', dayIndx[compareDate]);
+  
   return (now.getDay() === dayIndx[compareDate]);
 }
 

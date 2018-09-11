@@ -10,7 +10,6 @@ import {
   dayIndx,
 } from '../date-logic/date-maps';
 const dayClass = '_wx_m1';
-// const dayColClass = '_wx_u1';
 
 /**
  * updateCalendar - Determine if/how to render each of the current calendar-view's
@@ -20,11 +19,11 @@ export default function updateCalendar() {
   const $body = $('body');
   const { year, month, endDay } = getOutlookDateRange();
   const today = dayNumMap[new Date().getDay()];
-  console.log('today: ', today);
 
   if (!isOutdated(month, endDay, year)) {
     $body.addClass(`current-date-range ${today}`);
-    getCalendarView().targetList.map(markDays);
+    const calView = getCalendarView();
+    calView.targetList.map(markDays.bind(null, calView));
   } else {
     $(`.${dayClass}`).addClass('old-day');
     $body.removeClass('current-date-range');
@@ -38,10 +37,11 @@ export default function updateCalendar() {
  * 
  * @param  {Object} dateView - The map of the current calendar's view 
  */
-function markDays(dateView) {
+function markDays(calInfo, dateView, i, arr) {
   const left = getCssPx($(dateView.target), 'left');
   const $meeting = $(`.${dayClass}[style*="left: ${left}px"]`);
-  
+  // console.log('$meeting: ', $meeting);
+
   // ALL CALENDAR MEETINGS
   if ($meeting.length) {
     if ($('body').hasClass('current-date-range')) {
@@ -50,7 +50,15 @@ function markDays(dateView) {
       
       // MARK TODAY'S COLUMN.
       if (isToday(dateView.day)) {
-        $(getCalendarView().column[dateView.day]).addClass('today-column');
+        const $today = $('.today-column');
+        const $nextTodayView = $('._wx_u1:visible').eq(calInfo.column[dateView.day]);
+        // console.log('$nextTodayView: ', $nextTodayView)
+        if ($today.length && !$today.is($nextTodayView)) {
+          // console.log('calInfo.column[dateView.day]: ', calInfo.column[dateView.day]);
+          $today.removeClass('today-column');
+        }
+
+        $('._wx_u1:visible').eq(calInfo.column[dateView.day]).addClass(`today-column ${dateView.day}`);
       }
     }
 
