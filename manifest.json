@@ -4,16 +4,17 @@
   "description": "Display Outlook's calendar in a more intuitive way!",
   "incognito": "split",
   "browser_action": {
-    "default_icon": "calendar-outline-filled.png",
-    "default_popup": "popup.html"
+    "default_icon": "calendar-outline-filled.png"
   },
   "permissions": [
-    "activeTab",
-    "http://*/*",
-    "https://*/*"
+    "background"
   ],
-  "background": {
-    "page": "background.html"
-  },
+  "content_scripts": [{
+    "matches": [
+      "http://*/*",
+      "https://*/*"
+    ],
+    "js": ["content.js"]
+  }],
   "manifest_version": 2
 }

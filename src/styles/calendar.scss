@@ -89,4 +89,5 @@ $expired: #a6a6a6;
 .today-column {
   border-right: solid 1px $active;
   border-left: solid 1px $active;
+  box-sizing: border-box;
 }

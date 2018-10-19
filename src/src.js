@@ -1,6 +1,7 @@
-import observePageChange from './spa-helpers/observe-page-change.js';
-import updateCalendar from './outlook/render-calendar';
+// import observePageChange from './spa-helpers/observe-page-change.js';
+// import updateCalendar from './outlook/render-calendar';
 import pollJquery from './utils/poll-jquery.js';
+import Outlook from './outlook/outlook-class.js';
 import scss from './styles/calendar.scss';
 
 let counter = 0;
@@ -16,17 +17,29 @@ const interval = setInterval(() => {
         elementHasAttr('._wx_m1', 'style', 'width') &&
         elementHasAttr('._wx_m1', 'style', 'height')) {
 
+        clearInterval(interval);
+
         pollJquery(($) => {
           const $head = $('head');
+          // INSERT STYLES
           if (!$head.find('.noc-styles').length) $head.append(`<style class="noc-styles">${scss}</style>`);
-          updateCalendar();
-          observePageChange();
+
+          // INSTANTIATE
+          const outlook = new Outlook();
+          window.OUTLOOK = outlook;
+          console.log('outlook: ', outlook);
+          // outlook.instantiate();
+          // updateCalendar();
+          // observePageChange();
+          // TODO: 
+          // $(window).resize()
+          // $(window).resize()
         });
 
-        return clearInterval(interval);
+        return;
       }
-    
-    // START OBSERVER && WAIT FOR CAL TO APPEAR
+
+      // START OBSERVER && WAIT FOR CAL TO APPEAR
     } else {
       observePageChange();
       clearInterval(interval);
@@ -39,7 +52,7 @@ const interval = setInterval(() => {
 
   counter++;
   console.log('interval running....', counter);
-}, 700);
+}, 717);
 
 function elementHasAttr(selector, attr, AttrVal) {
   if (!AttrVal) {

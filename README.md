@@ -30,6 +30,7 @@ NOC calculates and overrides your Outlook's default browser-styles so that your 
 3. future meetings bug
 
 // BACKLOG
-1. Handling "Today" view.
-2. Handling "Month" view.
-3. Resize event
+- SetInterval/timer for every 5 minutes(?) to check for any old meetings...
+- Handling "Month" view.
+- Resize event
+- Observe for changes to each meeting(?)
