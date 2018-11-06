@@ -4,12 +4,12 @@ $canceled: rgba(218, 83, 44, .5);
 $expired: #a6a6a6;
 
 @mixin displayAs($color: $expired, $opacity: .7) {
-  background-color: rgba($color, $opacity) !important;
-  border: solid 1px $color;
-  box-sizing: border-box;
-
-  div._cb_C1 {
-    opacity: .5;
+  ._cb_H1,
+  ._cb_C1 {
+    opacity: .4;
+    // background-color: rgba($color, $opacity) !important;
+    // border: solid 1px $color;
+    // box-sizing: border-box;
   }
 }
 
@@ -28,18 +28,18 @@ $expired: #a6a6a6;
   }
 }
 
-.current-date-range.today-monday .sunday {
+.active-day--monday .sunday {
   @include displayAs($expired);
 }
 
-.current-date-range.today-tuesday {
+.active-day--tuesday {
   .sunday,
   .monday {
     @include displayAs($expired);
   }
 }
 
-.current-date-range.today-wednesday {
+.active-day--wednesday {
   .sunday, 
   .monday,
   .tuesday {
@@ -47,7 +47,7 @@ $expired: #a6a6a6;
   }
 }
 
-.current-date-range.today-thursday {
+.active-day--thursday {
   .sunday, 
   .monday,
   .tuesday,
@@ -56,7 +56,7 @@ $expired: #a6a6a6;
   }
 }
 
-.current-date-range.today-friday {
+.active-day--friday {
   .sunday, 
   .monday,
   .tuesday,
@@ -66,7 +66,7 @@ $expired: #a6a6a6;
   }
 }
 
-.current-date-range.today-saturday {
+.active-day--saturday {
   .sunday, 
   .monday,
   .tuesday,
@@ -90,4 +90,13 @@ $expired: #a6a6a6;
   border-right: solid 1px $active;
   border-left: solid 1px $active;
   box-sizing: border-box;
+}
+
+.inactive-days--old {
+  @include displayAs();
+
+  .today-column {
+    border-color: #eaeaea;
+    border-right: none;
+  }
 }

@@ -22,7 +22,9 @@ const interval = setInterval(() => {
         pollJquery(($) => {
           const $head = $('head');
           // INSERT STYLES
-          if (!$head.find('.noc-styles').length) $head.append(`<style class="noc-styles">${scss}</style>`);
+          if (!$head.find('.noc-styles').length) {
+            $head.append(`<style class="noc-styles">${scss}</style>`);
+          }
 
           // INSTANTIATE
           const outlook = new Outlook();
@@ -30,7 +32,7 @@ const interval = setInterval(() => {
           console.log('outlook: ', outlook);
           // outlook.instantiate();
           // updateCalendar();
-          // observePageChange();
+          // observePageChange(outlook);
           // TODO: 
           // $(window).resize()
           // $(window).resize()
@@ -39,7 +41,7 @@ const interval = setInterval(() => {
         return;
       }
 
-      // START OBSERVER && WAIT FOR CAL TO APPEAR
+      // START OBSERVER & WAIT FOR CAL TO APPEAR
     } else {
       observePageChange();
       clearInterval(interval);

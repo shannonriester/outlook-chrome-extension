@@ -1,5 +1,5 @@
 <!-- Author: Shannon Riester -->
-# Naturalize Outlook Calendar (NOC)
+# iNtuitive Outlook Calendar (NOC)
 A [Chrome extension]() that displays outdated appointments in a more intuitive way!
 
 ### Author
@@ -22,6 +22,9 @@ NOC calculates and overrides your Outlook's default browser-styles so that your 
 
 ## Credits
 - Gulp file
+- [Microsoft Outlook Calendar Docs](https://www.google.com/search?q=microsoft+outlook+calendar+developers&rlz=1C5CHFA_enUS749US749&oq=microsoft+outlook+calendar+developers&aqs=chrome..69i57.6040j0j7&sourceid=chrome&ie=UTF-8)
+  - [REST API](https://docs.microsoft.com/en-us/previous-versions/office/office-365-api/api/version-2.0/calendar-rest-operations)
+  - [Get Cal Groups](https://docs.microsoft.com/en-us/previous-versions/office/office-365-api/api/version-2.0/calendar-rest-operations#get-calendars)
 
 
 ## BUGSS
@@ -34,3 +37,13 @@ NOC calculates and overrides your Outlook's default browser-styles so that your 
 - Handling "Month" view.
 - Resize event
 - Observe for changes to each meeting(?)
+
+## Found Data
+- owa === Outlook Web App?
+- **window**
+  - `JSON.parse(window.owaSD.response)`
+- **network**
+  - `sessiondata.ashx?appcacheclient=0` URL
+  - `https://myemail.accenture.com/owa/prem/16.2624.9.2626075/scripts/owa.clientnext.application.js`
+- **search**
+  - `_wx_m1` -> #2: microsoft.owa.calendar.surface.v2.desktop
